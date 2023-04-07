@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.5.5",
+    "@chakra-ui/theme": "^3.0.1",
+    "@chakra-ui/theme-tools": "^2.0.17",
     "@next/font": "13.2.4",
     "@supabase/supabase-js": "^2.14.0",
     "eslint": "8.37.0",
@@ -16,6 +19,6 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-responsive-carousel": "^3.2.23"
+    "react-icons": "^4.8.0"
   }
 }
