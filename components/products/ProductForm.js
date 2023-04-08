@@ -19,7 +19,9 @@ import {
   GridItem,
   Image,
   Text,
+  Select,
 } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { AttachmentIcon } from '@chakra-ui/icons';
 
 const schema = yup.object().shape({
@@ -43,54 +45,60 @@ const ProductForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const toast = useToast();
 
   const [file, setFile] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState();
   const [previewImage, setPreviewImage] = useState(null);
 
   const onSubmit = async (values) => {
-    console.log(values);
     try {
       // Upload image to Supabase Storage
       const fileExtension = file.name.split('.').pop();
       const uniqueFileName = `${values.category}_${values.name}_${
         values.dimension
       }_${uuidv4()}.${fileExtension}`;
-      const filePath = `rekawice/${uniqueFileName}`;
+      const filePath = `${uniqueFileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('rekawice')
         .upload(filePath, file, { contentType: file.type });
 
       if (uploadError) {
-        console.error(uploadError.message);
-        return;
-      }
-
-      // Generate the public URL for the uploaded image
-      const { publicURL } = supabase.storage
-        .from('rekawice')
-        .getPublicUrl(filePath);
-
-      // Insert product data into the database, including the public URL of the image
-      const product = { ...values, image_path: filePath, image_url: publicURL };
-      console.log(product);
-      const { error: insertError } = await supabase
-        .from('products')
-        .insert([product]);
-
-      if (insertError) {
-        console.error(insertError.message);
+        console.error('File upload error:', uploadError);
+        // Show an error toast if needed
       } else {
-        // Reset the form and show a success message
-        reset();
-        setFile(null);
-        setFilePreview(null);
-        toast({
-          title: 'Product added successfully',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
+        // File uploaded successfully, now you can get the public URL
+
+        const projectUrl = 'https://kejpghvozqstsehxljkq.supabase.co';
+        const publicURL = `${projectUrl}/storage/v1/object/public/rekawice/${filePath}`;
+        console.log(publicURL);
+        // Insert product data into the database, including the public URL of the image
+
+        const product = {
+          ...values,
+          image_path: filePath,
+          image_url: publicURL,
+        };
+        console.log(product);
+        const { error: insertError } = await supabase
+          .from('products')
+          .insert([product]);
+
+        if (insertError) {
+          console.error(insertError.message);
+        } else {
+          // Reset the form and show a success message
+          reset();
+          setFile(null);
+          setPreviewImage(null);
+          toast({
+            title: 'Product added successfully',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       }
     } catch (error) {
       console.error(error.message);
@@ -121,11 +129,37 @@ const ProductForm = () => {
         </GridItem>
 
         <GridItem>
-          <FormControl id='category' isInvalid={errors.category}>
+          {/* <FormControl id='category' isInvalid={errors.category}>
             <FormLabel>Category</FormLabel>
             <Input {...register('category')} />
             <Text color='red.500'>{errors.category?.message}</Text>
-          </FormControl>
+          </FormControl> */}
+          <GridItem>
+            <FormControl id='category' isInvalid={errors.category}>
+              <FormLabel>Category</FormLabel>
+              <Controller
+                name='category'
+                control={control}
+                defaultValue={selectedCategory}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    onChange={(e) => {
+                      setSelectedCategory(e.target.value);
+                      field.onChange(e);
+                    }}
+                  >
+                    <option value='gloves'>Gloves</option>
+                    <option value='shoes'>Shoes</option>
+                    <option value='boots'>Boots</option>
+                    <option value='pants'>Pants</option>
+                    <option value='shirts'>Shirts</option>
+                  </Select>
+                )}
+              />
+              <Text color='red.500'>{errors.category?.message}</Text>
+            </FormControl>
+          </GridItem>
         </GridItem>
 
         <GridItem>
