@@ -1,0 +1,7 @@
+Policy for select
+
+((bucket_id = 'rekawice'::text) AND ((storage.extension(name) = 'jpg'::text) OR (storage.extension(name) = 'png'::text)) AND (lower((storage.foldername(name))[1]) = 'public'::text) AND ((storage.foldername(name))[2] = ANY (ARRAY['small'::text])) AND (auth.role() = 'anon'::text))
+
+Policy for List
+
+((bucket_id = 'rekawice'::text) AND ((storage.extension(name) = 'jpg'::text) OR (storage.extension(name) = 'png'::text)) AND (lower((storage.foldername(name))[1]) = 'public'::text) AND ((storage.foldername(name))[2] = ANY (ARRAY['small'::text])) AND (auth.role() = 'anon'::text))

@@ -11,7 +11,7 @@ const Footer = () => {
       as='footer'
       bg='yellow.400'
       boxShadow='sm'
-      height='4rem'
+      height='8rem'
       position='sticky'
       bottom='0'
       zIndex='sticky'
@@ -32,11 +32,11 @@ const Footer = () => {
         </GridItem>
         <GridItem textAlign='center'>
           <Text color='black'>
-            Your Company Name
+            <em>Odzież Robocza Drelix</em>
             <br />
-            1234 Your Street
+            ulica 43 Emila Zegadłowicza
             <br />
-            Your City, Your Country, Your ZIP
+            Wadowice, 34-100
           </Text>
         </GridItem>
         <GridItem textAlign='right'>
@@ -45,9 +45,6 @@ const Footer = () => {
             <br />
             Email: info@yourcompany.com
           </Text>
-          <Button colorScheme='whiteAlpha' color='black' mt={2}>
-            Button Text
-          </Button>
         </GridItem>
       </Grid>
     </Box>

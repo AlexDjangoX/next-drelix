@@ -1,9 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-const client = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from './supabaseClient.js';
 
 const bucketName = 'rekawice';
 
@@ -12,7 +7,7 @@ function getPublicUrls(dataArray) {
 }
 
 export async function getBucketUrls() {
-  const bucket = client.storage.from(bucketName);
+  const bucket = supabase.storage.from(bucketName);
   const { data: bucketContents, error } = await bucket.list();
 
   if (error) {
@@ -27,7 +22,7 @@ export async function getBucketUrls() {
   );
 
   const jpgPngUrls = jpgPngFiles.map((file) =>
-    client.storage.from(bucketName).getPublicUrl(file.name)
+    supabase.storage.from(bucketName).getPublicUrl(file.name)
   );
 
   const publicUrlArray = getPublicUrls(jpgPngUrls);

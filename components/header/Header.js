@@ -1,6 +1,6 @@
 // components/header/Header.js
 import React from 'react';
-import { Box, Grid, GridItem, Link, Image } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Link, Image, Button } from '@chakra-ui/react';
 
 const Header = () => {
   const logoSrc = '/path/to/your/logo/image'; // Replace with the path to your logo image
@@ -11,59 +11,65 @@ const Header = () => {
       position='sticky'
       top='0'
       zIndex='sticky'
-      height='4rem'
+      height='8rem'
       bg='yellow.400'
       boxShadow='sm'
     >
       <Grid
         templateColumns='repeat(7, 1fr)'
-        alignItems='center'
-        justifyContent='space-between'
         height='100%'
         maxWidth='container.xl'
-        margin='0 auto'
-        p={4}
+        pl={4}
+        pr={4}
+        alignContent={'center'}
       >
         <GridItem>
           <Link href='/'>
-            <Image src={logoSrc} alt='Your Logo' />
+            <Image src={logoSrc} alt='Drelix' />
           </Link>
         </GridItem>
         <GridItem colSpan={6}>
-          <Grid
-            templateColumns='repeat(6, 1fr)'
-            alignItems='center'
-            justifyContent='flex-end'
-            gap={4}
-          >
+          <Grid templateColumns='repeat(6, 1fr)' gap={1} textAlign='end'>
             <GridItem>
-              <Link href='/link1' color='black'>
-                Link 1
+              <Link href='/rekawice'>
+                <Button colorScheme='whiteAlpha' color='black'>
+                  Rękawice
+                </Button>
               </Link>
             </GridItem>
             <GridItem>
-              <Link href='/link2' color='black'>
-                Link 2
+              <Link href='/link2'>
+                <Button colorScheme='whiteAlpha' color='black'>
+                  Link 2
+                </Button>
               </Link>
             </GridItem>
             <GridItem>
-              <Link href='/link3' color='black'>
-                Link 3
+              <Link href='/link3'>
+                <Button colorScheme='whiteAlpha' color='black'>
+                  Link 3
+                </Button>
               </Link>
             </GridItem>
             <GridItem>
-              <Link href='/link4' color='black'>
-                Link 4
+              <Link href='/link4'>
+                <Button colorScheme='whiteAlpha' color='black'>
+                  Link 4
+                </Button>
               </Link>
             </GridItem>
             <GridItem>
-              <Link href='/link5' color='black'>
-                Link 5
+              <Link href='/link5'>
+                <Button colorScheme='whiteAlpha' color='black'>
+                  Link 5
+                </Button>
               </Link>
             </GridItem>
             <GridItem>
-              <Link href='/link6' color='black'>
-                Link 6
+              <Link href='/contact'>
+                <Button colorScheme='whiteAlpha' color='black'>
+                  Contact
+                </Button>
               </Link>
             </GridItem>
           </Grid>
