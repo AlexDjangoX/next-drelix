@@ -70,7 +70,7 @@ const ProductForm = () => {
       } else {
         // File uploaded successfully, now you can get the public URL
 
-        const projectUrl = 'https://kejpghvozqstsehxljkq.supabase.co';
+        const projectUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`;
         const publicURL = `${projectUrl}/storage/v1/object/public/rekawice/${filePath}`;
         console.log(publicURL);
         // Insert product data into the database, including the public URL of the image
@@ -106,10 +106,8 @@ const ProductForm = () => {
   };
 
   const handleFileChange = (e) => {
-    console.log(e.target.files[0]);
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
-      console.log(file);
       setPreviewImage(URL.createObjectURL(e.target.files[0]));
     } else {
       setFile(null);
@@ -129,11 +127,6 @@ const ProductForm = () => {
         </GridItem>
 
         <GridItem>
-          {/* <FormControl id='category' isInvalid={errors.category}>
-            <FormLabel>Category</FormLabel>
-            <Input {...register('category')} />
-            <Text color='red.500'>{errors.category?.message}</Text>
-          </FormControl> */}
           <GridItem>
             <FormControl id='category' isInvalid={errors.category}>
               <FormLabel>Category</FormLabel>

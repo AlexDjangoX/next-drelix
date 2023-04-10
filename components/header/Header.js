@@ -1,4 +1,3 @@
-// components/header/Header.js
 import React from 'react';
 import { Box, Grid, GridItem, Link, Image, Button } from '@chakra-ui/react';
 
