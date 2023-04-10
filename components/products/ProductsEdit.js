@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { v4 as uuidv4 } from 'uuid';
 import {
   Box,
   Button,
@@ -29,7 +32,7 @@ const fetcher = async (url) => {
 };
 
 function Products() {
-  const { data, error } = useSWR('/api/products', fetcher);
+  const { data, error, mutate } = useSWR('/api/products', fetcher);
 
   if (error) return <div>Error loading products</div>;
   if (!data) return <div>Loading...</div>;
@@ -37,13 +40,13 @@ function Products() {
   return (
     <Grid templateColumns='repeat(auto-fill, minmax(20rem, 1fr))' gap={6}>
       {data.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard key={product.id} product={product} mutate={mutate} />
       ))}
     </Grid>
   );
 }
 
-function ProductCard({ product }) {
+function ProductCard({ product, mutate }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleEdit = () => {
@@ -60,7 +63,7 @@ function ProductCard({ product }) {
       console.error('Error deleting product:', error);
     } else {
       // Refresh the data
-      mutate('/api/products');
+      mutate();
     }
   };
 
@@ -77,12 +80,17 @@ function ProductCard({ product }) {
       <Button colorScheme='blue' onClick={handleEdit}>
         Edit
       </Button>
-      {isOpen && <EditProductModal product={product} onClose={onClose} />}
+      {isOpen && (
+        <EditProductModal product={product} onClose={onClose} mutate={mutate} />
+      )}
     </Box>
   );
 }
 
-function EditProductModal({ product, onClose }) {
+function EditProductModal({ product, onClose, mutate }) {
+  const [newImage, setNewImage] = useState(null);
+  const [publicUrlDataBase, setPublicUrlDataBase] = useState('');
+
   const {
     register,
     handleSubmit,
@@ -95,19 +103,64 @@ function EditProductModal({ product, onClose }) {
     },
   });
 
+  const handleImageChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const fileExtension = file.name.split('.').pop();
+      const uniqueFileName = `${product.category}_${product.name}_${
+        product?.dimension
+      }_${uuidv4()}.${fileExtension}`;
+      console.log(uniqueFileName);
+      const filePath = `${uniqueFileName}`;
+      console.log(filePath);
+      // Upload the image to Supabase storage
+      const { error: uploadError } = await supabase.storage
+        .from('rekawice')
+        .upload(filePath, file, { contentType: file.type });
+
+      if (uploadError) {
+        console.error('Error uploading image:', uploadError);
+      } else {
+        // Construct the public URL
+        const projectUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`;
+        const publicURL = `${projectUrl}/storage/v1/object/public/rekawice/${filePath}`;
+        console.log(publicURL);
+        setPublicUrlDataBase(publicURL);
+        // Update the new image preview
+        setNewImage(publicURL);
+      }
+    }
+  };
+
   const onSubmit = async (data) => {
-    const { category, short_description, image_url } = data;
+    const { category, short_description, image } = data;
+    // Handle the image upload
+    let imageUrl = product.image_url;
+    if (image.length) {
+      const { error } = await supabase.storage
+        .from('rekawice')
+        .upload(`products/${image[0].name}`, image[0], { upsert: true });
+
+      if (error) {
+        console.error('Error uploading image:', error);
+        return;
+      }
+    }
 
     const { error } = await supabase
       .from('products')
-      .update({ category, short_description, image_url })
+      .update({
+        category,
+        short_description,
+        image_url: publicUrlDataBase === '' ? imageUrl : publicUrlDataBase,
+      })
       .eq('id', product.id);
 
     if (error) {
       console.error('Error updating product:', error);
     } else {
       // Refresh the data
-      mutate('/api/products');
+      mutate();
       onClose();
     }
   };
@@ -145,6 +198,28 @@ function EditProductModal({ product, onClose }) {
               <FormLabel>Image URL</FormLabel>
               <Input {...register('image_url')} />
               <Text color='red.500'>{errors.image_url?.message}</Text>
+            </FormControl>
+
+            <Box mt={4}>
+              <Text>Current Image:</Text>
+              <Image
+                src={newImage || product.image_url}
+                alt='Current image'
+                width='100'
+                height='100'
+              />
+            </Box>
+
+            <FormControl id='image' isInvalid={errors.image}>
+              <FormLabel>Image</FormLabel>
+              <Input
+                type='file'
+                accept='image/*'
+                {...register('image')}
+                onChange={handleImageChange}
+              />
+
+              <Text color='red.500'>{errors.image?.message}</Text>
             </FormControl>
           </ModalBody>
           <ModalFooter>
