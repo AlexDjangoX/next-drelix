@@ -1,81 +1,168 @@
 import React from 'react';
-import { Box, Grid, GridItem, Link, Image, Button } from '@chakra-ui/react';
+import {
+  useColorModeValue,
+  useDisclosure,
+  chakra,
+  VisuallyHidden,
+  Grid,
+  Button,
+  Box,
+  IconButton,
+  VStack,
+  CloseButton,
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { AiOutlineMenu } from 'react-icons/ai';
+
+// import Logo from './Logo';
 
 const Header = () => {
-  const logoSrc = '/path/to/your/logo/image'; // Replace with the path to your logo image
-
+  const bg = useColorModeValue('white', 'gray.800');
+  const mobileNav = useDisclosure();
   return (
-    <Box
-      as='header'
-      position='sticky'
-      top='0'
-      zIndex='sticky'
-      height='8rem'
-      bg='yellow.400'
-      boxShadow='sm'
-    >
-      <Grid
-        templateColumns='repeat(7, 1fr)'
-        height='100%'
-        maxWidth='container.xl'
-        pl={4}
-        pr={4}
-        alignContent={'center'}
+    <>
+      <chakra.header
+        bg={bg}
+        w='full'
+        px={{
+          base: 2,
+          sm: 4,
+        }}
+        py={4}
+        shadow='md'
       >
-        <GridItem>
-          <Link href='/'>
-            <Image src={logoSrc} alt='Drelix' />
-          </Link>
-        </GridItem>
-        <GridItem colSpan={6}>
-          <Grid templateColumns='repeat(6, 1fr)' gap={1} textAlign='end'>
-            <GridItem>
+        <Grid
+          templateColumns={{
+            base: '1fr auto',
+            md: 'repeat(2, 1fr)',
+          }}
+          alignItems='center'
+          justifyContent='space-between'
+          mx='auto'
+          gap={1}
+        >
+          <Grid
+            templateColumns='auto 1fr'
+            alignItems='center'
+            gridColumnGap={2}
+          >
+            <chakra.a
+              href='/'
+              title='Choc Home Page'
+              display='grid'
+              alignItems='center'
+            >
+              {/* <Logo /> */}
+              <VisuallyHidden>Choc</VisuallyHidden>
+            </chakra.a>
+            <chakra.h1 fontSize='xl' fontWeight='medium'>
+              Choc
+            </chakra.h1>
+          </Grid>
+
+          <Grid
+            templateColumns='repeat(5, 1fr)'
+            alignItems='center'
+            gridColumnGap={1}
+            display={{
+              base: 'none',
+              md: 'grid',
+            }}
+          >
+            <Link href='/rekawice'>
+              <Button w='full' variant='ghost'>
+                Rękawice
+              </Button>
+            </Link>
+            <Link href='/rekawice'>
+              <Button w='full' variant='ghost'>
+                Rękawice
+              </Button>
+            </Link>
+            <Link href='/rekawice'>
+              <Button w='full' variant='ghost'>
+                Rękawice
+              </Button>
+            </Link>
+            <Link href='/rekawice'>
+              <Button w='full' variant='ghost'>
+                Rękawice
+              </Button>
+            </Link>
+            <Link href='/rekawice'>
+              <Button w='full' variant='ghost'>
+                Rękawice
+              </Button>
+            </Link>
+          </Grid>
+
+          <Box
+            display={{
+              base: 'grid',
+              md: 'none',
+            }}
+          >
+            <IconButton
+              aria-label='Open menu'
+              fontSize='20px'
+              color='gray.800'
+              _dark={{
+                color: 'inherit',
+              }}
+              variant='ghost'
+              icon={<AiOutlineMenu />}
+              onClick={mobileNav.onOpen}
+            />
+
+            <VStack
+              pos='absolute'
+              top={0}
+              left={0}
+              right={0}
+              display={mobileNav.isOpen ? 'flex' : 'none'}
+              flexDirection='column'
+              p={2}
+              pb={4}
+              m={2}
+              bg={bg}
+              spacing={3}
+              rounded='sm'
+              shadow='sm'
+            >
+              <CloseButton
+                aria-label='Close menu'
+                onClick={mobileNav.onClose}
+              />
               <Link href='/rekawice'>
-                <Button colorScheme='whiteAlpha' color='black'>
+                <Button w='full' variant='ghost'>
                   Rękawice
                 </Button>
               </Link>
-            </GridItem>
-            <GridItem>
-              <Link href='/link2'>
-                <Button colorScheme='whiteAlpha' color='black'>
-                  Link 2
+              <Link href='/rekawice'>
+                <Button w='full' variant='ghost'>
+                  Rękawice
                 </Button>
               </Link>
-            </GridItem>
-            <GridItem>
-              <Link href='/link3'>
-                <Button colorScheme='whiteAlpha' color='black'>
-                  Link 3
+              <Link href='/rekawice'>
+                <Button w='full' variant='ghost'>
+                  Rękawice
                 </Button>
               </Link>
-            </GridItem>
-            <GridItem>
-              <Link href='/link4'>
-                <Button colorScheme='whiteAlpha' color='black'>
-                  Link 4
+              <Link href='/rekawice'>
+                <Button w='full' variant='ghost'>
+                  Rękawice
                 </Button>
               </Link>
-            </GridItem>
-            <GridItem>
-              <Link href='/link5'>
-                <Button colorScheme='whiteAlpha' color='black'>
-                  Link 5
+              <Link href='/rekawice'>
+                <Button w='full' variant='ghost'>
+                  Rękawice
                 </Button>
               </Link>
-            </GridItem>
-            <GridItem>
-              <Link href='/contact'>
-                <Button colorScheme='whiteAlpha' color='black'>
-                  Contact
-                </Button>
-              </Link>
-            </GridItem>
-          </Grid>
-        </GridItem>
-      </Grid>
-    </Box>
+            </VStack>
+          </Box>
+        </Grid>
+      </chakra.header>
+    </>
   );
 };
-
 export default Header;

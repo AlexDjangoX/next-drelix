@@ -29,6 +29,12 @@ const schema = yup.object().shape({
   category: yup.string().required('Category is required'),
   price: yup
     .number()
+    .transform((value, originalValue) => {
+      if (typeof originalValue === 'string') {
+        return parseFloat(parseFloat(originalValue).toFixed(2));
+      }
+      return value;
+    })
     .positive('Price must be positive')
     .required('Price is required'),
   short_description: yup.string().required('Short description is required'),
@@ -58,6 +64,7 @@ const ProductForm = () => {
       const uniqueFileName = `${values.category}_${values.name}_${
         values.dimension
       }_${uuidv4()}.${fileExtension}`;
+
       const filePath = `${uniqueFileName}`;
 
       const { error: uploadError } = await supabase.storage
@@ -72,7 +79,6 @@ const ProductForm = () => {
 
         const projectUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`;
         const publicURL = `${projectUrl}/storage/v1/object/public/rekawice/${filePath}`;
-        console.log(publicURL);
         // Insert product data into the database, including the public URL of the image
 
         const product = {
@@ -89,7 +95,13 @@ const ProductForm = () => {
           console.error(insertError.message);
         } else {
           // Reset the form and show a success message
-          reset();
+          reset({
+            name: '',
+            category: selectedCategory,
+            price: '',
+            short_description: '',
+            dimension: '',
+          });
           setFile(null);
           setPreviewImage(null);
           toast({
@@ -162,11 +174,18 @@ const ProductForm = () => {
               name='price'
               control={control}
               render={({ field }) => (
-                <NumberInput min={0} {...field}>
+                <NumberInput
+                  min={0}
+                  {...field}
+                  onChange={(value) => {
+                    field.onChange(parseFloat(value).toFixed(2));
+                  }}
+                >
                   <NumberInputField />
                 </NumberInput>
               )}
             />
+
             <Text color='red.500'>{errors.price?.message}</Text>
           </FormControl>
         </GridItem>
