@@ -1,15 +1,15 @@
-import { Grid, Heading } from '@chakra-ui/react';
-import { blackShadows } from '../../styles/shadows';
+import { Grid, Heading, Text } from '@chakra-ui/react';
+
 const Hero = () => {
   return (
     <Grid placeItems='center' height='calc(100vh - 18rem)'>
       <Heading
         fontFamily='Roboto'
-        fontSize='2rem'
-        color='violet'
-        textShadow={blackShadows[200]}
+        fontSize='6rem'
+        color='brand.yellow.300'
+        boxShadow='shadow.blackShadow.500'
       >
-        Welcome to Drelix !!
+        Welcome to Drelix!!
       </Heading>
     </Grid>
   );

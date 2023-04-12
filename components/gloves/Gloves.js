@@ -1,7 +1,17 @@
 import { Box, Grid, Image, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 
 const Gloves = ({ gloves }) => {
-  console.log(gloves);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
+
   return (
     <Grid
       templateColumns={[
@@ -12,7 +22,7 @@ const Gloves = ({ gloves }) => {
       ]}
       gap={6}
     >
-      {gloves.map((glove) => (
+      {gloves.map((glove, index) => (
         <Box
           key={glove.id}
           w='20rem'
@@ -20,18 +30,28 @@ const Gloves = ({ gloves }) => {
           borderWidth='1px'
           borderRadius='lg'
           overflow='hidden'
+          onMouseEnter={() => handleMouseEnter(index)}
+          onMouseLeave={handleMouseLeave}
         >
-          <Text fontWeight='bold' fontSize='xl' p={2}>
-            {glove.category}
-          </Text>
-          <Image
-            src={glove.image_url}
-            alt={glove.short_description}
-            mt={3}
-            mx={1}
-            mb={1}
-          />
-          <Text p={2}>{glove.short_description}</Text>
+          {hoveredIndex === index ? (
+            <Text p={2}>{glove.short_description.split('_')[1]}</Text>
+          ) : (
+            <>
+              <Box key={index}>
+                <Text fontWeight='bold' fontSize='xl' p={2} key={index}>
+                  {glove.category}
+                </Text>
+                <Image
+                  src={glove.image_url}
+                  alt={glove.short_description}
+                  mt={3}
+                  mx={1}
+                  mb={1}
+                />
+                <Text p={2}>{glove.short_description.split('_')[0]}</Text>
+              </Box>
+            </>
+          )}
         </Box>
       ))}
     </Grid>

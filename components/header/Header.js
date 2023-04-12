@@ -30,6 +30,8 @@ const Header = () => {
         }}
         py={4}
         shadow='md'
+        color='brand.yellow.500'
+        textShadow='shadow.blackShadow.500'
       >
         <Grid
           templateColumns={{
