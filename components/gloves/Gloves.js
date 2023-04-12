@@ -1,7 +1,7 @@
-import { supabase } from '../../utils/supabaseClient';
 import { Box, Grid, Image, Text } from '@chakra-ui/react';
 
-const Shirts = ({ shirts }) => {
+const Gloves = ({ gloves }) => {
+  console.log(gloves);
   return (
     <Grid
       templateColumns={[
@@ -12,30 +12,30 @@ const Shirts = ({ shirts }) => {
       ]}
       gap={6}
     >
-      {shirts.map((shirt) => (
+      {gloves.map((glove) => (
         <Box
-          key={shirt.id}
+          key={glove.id}
           w='20rem'
-          h='25rem'
+          h='35rem'
           borderWidth='1px'
           borderRadius='lg'
           overflow='hidden'
         >
           <Text fontWeight='bold' fontSize='xl' p={2}>
-            {shirt.category}
+            {glove.category}
           </Text>
           <Image
-            src={shirt.image_url}
-            alt={shirt.short_description}
+            src={glove.image_url}
+            alt={glove.short_description}
             mt={3}
             mx={1}
             mb={1}
           />
-          <Text p={2}>{shirt.short_description}</Text>
+          <Text p={2}>{glove.short_description}</Text>
         </Box>
       ))}
     </Grid>
   );
 };
 
-export default Shirts;
+export default Gloves;

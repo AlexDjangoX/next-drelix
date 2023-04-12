@@ -55,8 +55,12 @@ const Header = () => {
               {/* <Logo /> */}
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
-            <chakra.h1 fontSize='xl' fontWeight='medium'>
-              Choc
+            <chakra.h1
+              fontSize='xl'
+              fontWeight='600'
+              fontFamily="'Roboto', sans-serif"
+            >
+              Drelix
             </chakra.h1>
           </Grid>
 
@@ -69,29 +73,29 @@ const Header = () => {
               md: 'grid',
             }}
           >
-            <Link href='/rekawice'>
+            <Link href='/boots'>
               <Button w='full' variant='ghost'>
-                Rękawice
+                Boots
               </Button>
             </Link>
-            <Link href='/rekawice'>
+            <Link href='/gloves'>
               <Button w='full' variant='ghost'>
-                Rękawice
+                Gloves
               </Button>
             </Link>
-            <Link href='/rekawice'>
+            <Link href='/product-images'>
               <Button w='full' variant='ghost'>
-                Rękawice
+                Product Images
               </Button>
             </Link>
-            <Link href='/rekawice'>
+            <Link href='/products'>
               <Button w='full' variant='ghost'>
-                Rękawice
+                Add Product
               </Button>
             </Link>
-            <Link href='/rekawice'>
+            <Link href='/products-edit'>
               <Button w='full' variant='ghost'>
-                Rękawice
+                Edit Product
               </Button>
             </Link>
           </Grid>

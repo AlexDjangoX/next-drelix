@@ -29,12 +29,7 @@ const schema = yup.object().shape({
   category: yup.string().required('Category is required'),
   price: yup
     .number()
-    .transform((value, originalValue) => {
-      if (typeof originalValue === 'string') {
-        return parseFloat(parseFloat(originalValue).toFixed(2));
-      }
-      return value;
-    })
+    .typeError('Price must be a valid number')
     .positive('Price must be positive')
     .required('Price is required'),
   short_description: yup.string().required('Short description is required'),
@@ -176,16 +171,14 @@ const ProductForm = () => {
               render={({ field }) => (
                 <NumberInput
                   min={0}
+                  precision={2}
                   {...field}
-                  onChange={(value) => {
-                    field.onChange(parseFloat(value).toFixed(2));
-                  }}
+                  onChange={(value) => field.onChange(value)}
                 >
                   <NumberInputField />
                 </NumberInput>
               )}
             />
-
             <Text color='red.500'>{errors.price?.message}</Text>
           </FormControl>
         </GridItem>
