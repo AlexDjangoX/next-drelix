@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import {
   useColorModeValue,
   useDisclosure,
@@ -54,7 +55,12 @@ const Header = () => {
               display='grid'
               alignItems='center'
             >
-              {/* <Logo /> */}
+              <Image
+                src='/images/logo.jpg'
+                alt='Choc Logo'
+                width={100}
+                height={100}
+              />
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
             <chakra.h1

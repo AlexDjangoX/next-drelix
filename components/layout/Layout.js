@@ -11,7 +11,7 @@ const Layout = ({ children }) => (
     </Head>
     <main>
       <Header />
-      <Box maxWidth='container.xl' margin='0 auto' p={4}>
+      <Box margin='0 auto' p={0}>
         {children}
       </Box>
       <Footer />
