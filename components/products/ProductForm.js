@@ -123,7 +123,7 @@ const ProductForm = () => {
   };
 
   return (
-    <Box as='form' onSubmit={handleSubmit(onSubmit)}>
+    <Box as='form' onSubmit={handleSubmit(onSubmit)} p={24}>
       <Grid templateColumns='repeat(2, 1fr)' gap={4}>
         <GridItem colSpan={2}>
           <FormControl id='name' isInvalid={errors.name}>
@@ -134,32 +134,31 @@ const ProductForm = () => {
         </GridItem>
 
         <GridItem>
-          <GridItem>
-            <FormControl id='category' isInvalid={errors.category}>
-              <FormLabel>Category</FormLabel>
-              <Controller
-                name='category'
-                control={control}
-                defaultValue={selectedCategory}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    onChange={(e) => {
-                      setSelectedCategory(e.target.value);
-                      field.onChange(e);
-                    }}
-                  >
-                    <option value='gloves'>Gloves</option>
-                    <option value='shoes'>Shoes</option>
-                    <option value='boots'>Boots</option>
-                    <option value='pants'>Pants</option>
-                    <option value='shirts'>Shirts</option>
-                  </Select>
-                )}
-              />
-              <Text color='red.500'>{errors.category?.message}</Text>
-            </FormControl>
-          </GridItem>
+          <FormControl id='category' isInvalid={errors.category}>
+            <FormLabel>Category</FormLabel>
+            <Controller
+              name='category'
+              control={control}
+              defaultValue={selectedCategory}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    field.onChange(e);
+                  }}
+                >
+                  <option value='gumBoots'>Kalosze</option>
+                  <option value='halfBoots'>Pół Buty</option>
+                  <option value='fullBoots'>Całe Buty</option>
+                  <option value='sandals'>Sandały</option>
+                  <option value='gloves'>Rękawice</option>
+                  <option value='shirts'>Koszule</option>
+                </Select>
+              )}
+            />
+            <Text color='red.500'>{errors.category?.message}</Text>
+          </FormControl>
         </GridItem>
 
         <GridItem>
@@ -216,23 +215,30 @@ const ProductForm = () => {
               />
             </InputGroup>
           </FormControl>
+          <GridItem />
+        </GridItem>
+
+        <GridItem>
+          <Button mt={6} type='submit' colorScheme='blue'>
+            Submit
+          </Button>
+        </GridItem>
+        <GridItem>
           {previewImage && (
             <Box mt={4}>
               <Image
                 src={previewImage}
                 alt='Preview'
-                boxSize='100px'
+                boxSize='200px'
                 objectFit='cover'
                 borderRadius='md'
+                width='12%'
+                height='auto'
               />
             </Box>
           )}
         </GridItem>
       </Grid>
-
-      <Button mt={6} type='submit' colorScheme='blue'>
-        Submit
-      </Button>
     </Box>
   );
 };

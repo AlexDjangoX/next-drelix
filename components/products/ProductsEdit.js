@@ -38,11 +38,19 @@ function Products() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <Grid templateColumns='repeat(auto-fill, minmax(20rem, 1fr))' gap={6}>
-      {data.map((product) => (
-        <ProductCard key={product.id} product={product} mutate={mutate} />
-      ))}
-    </Grid>
+    <Box mx={12} mt={12}>
+      <Grid
+        templateColumns='repeat(auto-fill, minmax(20rem, 1fr))'
+        gap={6}
+        justifyContent='center'
+        placeItems='center'
+        css={{ gridAutoFlow: 'dense' }}
+      >
+        {data.map((product) => (
+          <ProductCard key={product.id} product={product} mutate={mutate} />
+        ))}
+      </Grid>
+    </Box>
   );
 }
 
@@ -68,18 +76,48 @@ function ProductCard({ product, mutate }) {
   };
 
   return (
-    <Box borderWidth='1px' borderRadius='lg' p={4} w='20rem' h='25rem'>
+    <Box
+      borderWidth='1px'
+      borderRadius='lg'
+      p={4}
+      w='20rem'
+      h='45rem'
+      css={{ scrollbarWidth: 'thin' }}
+      key={product.id}
+    >
       <Text>{product.category}</Text>
       <Box mb={4}>
-        <img src={product.image_url} alt={product.short_description} />
+        <Image
+          src={product.image_url}
+          alt={product.short_description}
+          key={product.id}
+          width='200'
+          height='200'
+          mt={6}
+          mx={1}
+          mb={6}
+        />
       </Box>
-      <Text>{product.short_description}</Text>
-      <Button colorScheme='red' onClick={handleDelete}>
-        Delete
-      </Button>
-      <Button colorScheme='blue' onClick={handleEdit}>
-        Edit
-      </Button>
+      <Text h='14rem' overflowY='scroll' overflowX='hidden'>
+        {product.short_description.split('_')[0]}
+      </Text>
+      <Box display='grid' placeItems='center' w='full'>
+        <Box
+          display='grid'
+          gridTemplateColumns='1fr 1fr'
+          gridGap={12}
+          alignItems='center'
+          w='12rem'
+        >
+          <Button colorScheme='red' onClick={handleDelete} mt={16}>
+            Delete
+          </Button>
+          <Button colorScheme='blue' onClick={handleEdit} mt={16}>
+            Edit
+          </Button>
+        </Box>
+      </Box>
+
       {isOpen && (
         <EditProductModal product={product} onClose={onClose} mutate={mutate} />
       )}
@@ -176,11 +214,12 @@ function EditProductModal({ product, onClose, mutate }) {
             <FormControl id='category' isInvalid={errors.category}>
               <FormLabel>Category</FormLabel>
               <Select {...register('category')}>
-                <option value='gloves'>Gloves</option>
-                <option value='shoes'>Shoes</option>
-                <option value='boots'>Boots</option>
-                <option value='pants'>Pants</option>
-                <option value='shirts'>Shirts</option>
+                <option value='gumBoots'>Kalosze</option>
+                <option value='halfBoots'>Pół Buty</option>
+                <option value='fullBoots'>Całe Buty</option>
+                <option value='sandals'>Sandały</option>
+                <option value='gloves'>Rękawice</option>
+                <option value='shirts'>Koszule</option>
               </Select>
               <Text color='red.500'>{errors.category?.message}</Text>
             </FormControl>

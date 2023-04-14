@@ -15,11 +15,29 @@ import {
 import Link from 'next/link';
 import { AiOutlineMenu } from 'react-icons/ai';
 
-// import Logo from './Logo';
-
 const Header = () => {
   const bg = useColorModeValue('white', 'gray.800');
   const mobileNav = useDisclosure();
+
+  function formatString(input) {
+    const words = input.replace(/^\//, '').split('-');
+
+    const capitalized = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+
+    return capitalized.join(' ');
+  }
+
+  const pageLinks = [
+    '/pants',
+    '/boots',
+    '/gloves',
+    '/product-images',
+    '/products',
+    '/products-edit',
+  ];
+
   return (
     <>
       <chakra.header
@@ -31,8 +49,9 @@ const Header = () => {
         }}
         py={4}
         shadow='md'
-        color='brand.yellow.500'
-        textShadow='shadow.blackShadow.500'
+        color='brand.yellow.400'
+        fontFamily={'Roboto'}
+        fontWeight={100}
       >
         <Grid
           templateColumns={{
@@ -58,22 +77,23 @@ const Header = () => {
               <Image
                 src='/images/logo.jpg'
                 alt='Choc Logo'
-                width={100}
-                height={100}
+                width={80}
+                height={80}
               />
-              <VisuallyHidden>Choc</VisuallyHidden>
+              <VisuallyHidden>Drelix</VisuallyHidden>
             </chakra.a>
             <chakra.h1
               fontSize='xl'
-              fontWeight='600'
-              fontFamily="'Roboto', sans-serif"
+              fontFamily='Roboto'
+              fontWeight='400'
+              pl={12}
             >
               Drelix
             </chakra.h1>
           </Grid>
 
           <Grid
-            templateColumns='repeat(5, 1fr)'
+            templateColumns='repeat(6, 1fr)'
             alignItems='center'
             gridColumnGap={1}
             display={{
@@ -81,31 +101,20 @@ const Header = () => {
               md: 'grid',
             }}
           >
-            <Link href='/boots'>
-              <Button w='full' variant='ghost'>
-                Boots
-              </Button>
-            </Link>
-            <Link href='/gloves'>
-              <Button w='full' variant='ghost'>
-                Gloves
-              </Button>
-            </Link>
-            <Link href='/product-images'>
-              <Button w='full' variant='ghost'>
-                Product Images
-              </Button>
-            </Link>
-            <Link href='/products'>
-              <Button w='full' variant='ghost'>
-                Add Product
-              </Button>
-            </Link>
-            <Link href='/products-edit'>
-              <Button w='full' variant='ghost'>
-                Edit Product
-              </Button>
-            </Link>
+            {pageLinks.map((link) => (
+              <>
+                <Link href={link}>
+                  <Button
+                    w='full'
+                    variant='ghost'
+                    fontFamily='Roboto'
+                    fontWeight='400'
+                  >
+                    {formatString(link)}
+                  </Button>
+                </Link>
+              </>
+            ))}
           </Grid>
 
           <Box
@@ -145,31 +154,20 @@ const Header = () => {
                 aria-label='Close menu'
                 onClick={mobileNav.onClose}
               />
-              <Link href='/rekawice'>
-                <Button w='full' variant='ghost'>
-                  Rękawice
-                </Button>
-              </Link>
-              <Link href='/rekawice'>
-                <Button w='full' variant='ghost'>
-                  Rękawice
-                </Button>
-              </Link>
-              <Link href='/rekawice'>
-                <Button w='full' variant='ghost'>
-                  Rękawice
-                </Button>
-              </Link>
-              <Link href='/rekawice'>
-                <Button w='full' variant='ghost'>
-                  Rękawice
-                </Button>
-              </Link>
-              <Link href='/rekawice'>
-                <Button w='full' variant='ghost'>
-                  Rękawice
-                </Button>
-              </Link>
+              {pageLinks.map((link) => (
+                <>
+                  <Link href={link}>
+                    <Button
+                      w='full'
+                      variant='ghost'
+                      fontFamily='Roboto'
+                      fontWeight='400'
+                    >
+                      {formatString(link)}
+                    </Button>
+                  </Link>
+                </>
+              ))}
             </VStack>
           </Box>
         </Grid>

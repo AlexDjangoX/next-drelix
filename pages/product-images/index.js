@@ -5,6 +5,7 @@ import { getBucketUrls } from '../../utils/supabase';
 import { Grid, GridItem } from '@chakra-ui/react';
 
 export default function index({ urls }) {
+  console.log(urls.length);
   const styles = {
     border: '1px solid black',
     borderRadius: '3px',
@@ -93,6 +94,7 @@ export default function index({ urls }) {
 
 export async function getStaticProps() {
   const urls = await getBucketUrls();
+  console.log(urls);
 
   return {
     props: {

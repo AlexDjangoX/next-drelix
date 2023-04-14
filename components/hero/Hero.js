@@ -12,9 +12,10 @@ const Hero = () => {
       <Grid placeItems='center' height='calc(100vh - 18rem)'>
         <Heading
           fontFamily='Roboto'
+          fontWeight='100'
           fontSize='6rem'
           color='brand.yellow.300'
-          boxShadow='shadow.blackShadow.500'
+          boxShadow='shadow.blackShadow.300'
         >
           Welcome to Drelix!!
         </Heading>

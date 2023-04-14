@@ -9,7 +9,7 @@ function getPublicUrls(dataArray) {
 export async function getBucketUrls() {
   const bucket = supabase.storage.from(bucketName);
   const { data: bucketContents, error } = await bucket.list();
-
+  console.log(bucketContents.length);
   if (error) {
     console.error(error);
     return [];

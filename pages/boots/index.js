@@ -1,18 +1,42 @@
-import { Grid, Heading } from '@chakra-ui/react';
+import { supabase } from '../../utils/supabaseClient.js';
+import Boots from '../../components/boots/Boots.js';
 
-const index = () => {
+const index = ({ sandals, halfBoots, fullBoots }) => {
+  console.log(sandals);
+  console.log(halfBoots);
   return (
-    <Grid placeItems='center' height='100vh'>
-      <Heading
-        fontFamily='Roboto'
-        fontSize='2rem'
-        color='violet'
-        textShadow='1px 1px #000'
-      >
-        Welcome to Drelix !!
-      </Heading>
-    </Grid>
+    <Boots halfBoots={halfBoots} sandals={sandals} fullBoots={fullBoots} />
   );
 };
+
+export async function getServerSideProps() {
+  const { data: sandals, error: error1 } = await supabase
+    .from('products')
+    .select('*')
+    .eq('category', 'sandals');
+
+  const { data: halfBoots, error: error2 } = await supabase
+    .from('products')
+    .select('*')
+    .eq('category', 'halfBoots');
+
+  const { data: fullBoots, error: error3 } = await supabase
+    .from('products')
+    .select('*')
+    .eq('category', 'fullBoots');
+
+  if (error1 || error2 || error3) {
+    console.error('Error fetching products:', error1 || error2);
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      sandals,
+      halfBoots,
+      fullBoots,
+    },
+  };
+}
 
 export default index;
