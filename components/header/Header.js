@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { v4 as uuidv4 } from 'uuid';
 import {
   useColorModeValue,
   useDisclosure,
@@ -39,7 +40,7 @@ const Header = () => {
   ];
 
   return (
-    <>
+    <div style={{ position: 'sticky', top: 0, height: '64px' }}>
       <chakra.header
         bg={bg}
         w='full'
@@ -52,6 +53,7 @@ const Header = () => {
         color='brand.yellow.400'
         fontFamily={'Roboto'}
         fontWeight={100}
+        // opacity={0.8}
       >
         <Grid
           templateColumns={{
@@ -103,7 +105,7 @@ const Header = () => {
           >
             {pageLinks.map((link) => (
               <>
-                <Link href={link}>
+                <Link href={link} key={uuidv4()}>
                   <Button
                     w='full'
                     variant='ghost'
@@ -156,7 +158,7 @@ const Header = () => {
               />
               {pageLinks.map((link) => (
                 <>
-                  <Link href={link}>
+                  <Link href={link} key={uuidv4()}>
                     <Button
                       w='full'
                       variant='ghost'
@@ -172,7 +174,7 @@ const Header = () => {
           </Box>
         </Grid>
       </chakra.header>
-    </>
+    </div>
   );
 };
 export default Header;

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,6 +38,12 @@ const schema = yup.object().shape({
 });
 
 const ProductForm = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -45,6 +52,10 @@ const ProductForm = () => {
     reset,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      price: 9.92,
+      dimension: '700x700',
+    },
   });
   const toast = useToast();
 
@@ -81,7 +92,6 @@ const ProductForm = () => {
           image_path: filePath,
           image_url: publicURL,
         };
-        console.log(product);
         const { error: insertError } = await supabase
           .from('products')
           .insert([product]);
@@ -123,123 +133,131 @@ const ProductForm = () => {
   };
 
   return (
-    <Box as='form' onSubmit={handleSubmit(onSubmit)} p={24}>
-      <Grid templateColumns='repeat(2, 1fr)' gap={4}>
-        <GridItem colSpan={2}>
-          <FormControl id='name' isInvalid={errors.name}>
-            <FormLabel>Name</FormLabel>
-            <Input {...register('name')} />
-            <Text color='red.500'>{errors.name?.message}</Text>
-          </FormControl>
-        </GridItem>
-
-        <GridItem>
-          <FormControl id='category' isInvalid={errors.category}>
-            <FormLabel>Category</FormLabel>
-            <Controller
-              name='category'
-              control={control}
-              defaultValue={selectedCategory}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  onChange={(e) => {
-                    setSelectedCategory(e.target.value);
-                    field.onChange(e);
-                  }}
-                >
-                  <option value='gumBoots'>Kalosze</option>
-                  <option value='halfBoots'>Pół Buty</option>
-                  <option value='fullBoots'>Całe Buty</option>
-                  <option value='sandals'>Sandały</option>
-                  <option value='gloves'>Rękawice</option>
-                  <option value='shirts'>Koszule</option>
-                </Select>
-              )}
-            />
-            <Text color='red.500'>{errors.category?.message}</Text>
-          </FormControl>
-        </GridItem>
-
-        <GridItem>
-          <FormControl id='price' isInvalid={errors.price}>
-            <FormLabel>Price</FormLabel>
-            <Controller
-              name='price'
-              control={control}
-              render={({ field }) => (
-                <NumberInput
-                  min={0}
-                  precision={2}
-                  {...field}
-                  onChange={(value) => field.onChange(value)}
-                >
-                  <NumberInputField />
-                </NumberInput>
-              )}
-            />
-            <Text color='red.500'>{errors.price?.message}</Text>
-          </FormControl>
-        </GridItem>
-
-        <GridItem colSpan={2}>
-          <FormControl
-            id='short_description'
-            isInvalid={errors.shortDescription}
-          >
-            <FormLabel>Short Description</FormLabel>
-            <Textarea {...register('short_description')} />
-            <Text color='red.500'>{errors.shortDescription?.message}</Text>
-          </FormControl>
-        </GridItem>
-
-        <GridItem>
-          <FormControl id='dimension' isInvalid={errors.dimension}>
-            <FormLabel>Dimension</FormLabel>
-            <Input {...register('dimension')} />
-            <Text color='red.500'>{errors.dimension?.message}</Text>
-          </FormControl>
-        </GridItem>
-
-        <GridItem>
-          <FormControl id='file'>
-            <FormLabel>Upload Image</FormLabel>
-            <InputGroup>
-              <InputLeftAddon>
-                <AttachmentIcon />
-              </InputLeftAddon>
+    <>
+      <Box as='form' onSubmit={handleSubmit(onSubmit)} noValidate p={24}>
+        <Grid templateColumns='repeat(2, 1fr)' gap={4}>
+          <GridItem colSpan={2}>
+            <FormControl id='name' isInvalid={errors.name}>
+              <FormLabel>Name</FormLabel>
               <Input
-                type='file'
-                accept='.png,.jpeg,.jpg'
-                onChange={handleFileChange}
+                {...register('name')}
+                // defaultValue={isEditing ? contact.name : ''}
               />
-            </InputGroup>
-          </FormControl>
-          <GridItem />
-        </GridItem>
+              <Text color='red.500'>{errors.name?.message}</Text>
+            </FormControl>
+          </GridItem>
 
-        <GridItem>
-          <Button mt={6} type='submit' colorScheme='blue'>
-            Submit
-          </Button>
-        </GridItem>
-        <GridItem>
-          {previewImage && (
-            <Box mt={4}>
-              <Image
-                src={previewImage}
-                alt='Preview'
-                boxSize='200px'
-                objectFit='cover'
-                borderRadius='md'
-                width='12%'
-                height='auto'
+          <GridItem>
+            <FormControl id='category' isInvalid={errors.category}>
+              <FormLabel>Category</FormLabel>
+              <Controller
+                name='category'
+                control={control}
+                defaultValue={selectedCategory}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    onChange={(e) => {
+                      setSelectedCategory(e.target.value);
+                      field.onChange(e);
+                    }}
+                  >
+                    <option value='gumBoots'>Kalosze</option>
+                    <option value='halfBoots'>Pół Buty</option>
+                    <option value='fullBoots'>Całe Buty</option>
+                    <option value='pants'>Spodnie</option>
+                    <option value='sandals'>Sandały</option>
+                    <option value='gloves'>Rękawice</option>
+                    <option value='shirts'>Koszule</option>
+                  </Select>
+                )}
               />
-            </Box>
-          )}
-        </GridItem>
-      </Grid>
-    </Box>
+              <Text color='red.500'>{errors.category?.message}</Text>
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl id='price' isInvalid={errors.price}>
+              <FormLabel>Price</FormLabel>
+              <Controller
+                name='price'
+                control={control}
+                render={({ field }) => (
+                  <NumberInput
+                    min={0}
+                    precision={2}
+                    {...field}
+                    onChange={(value) => field.onChange(value)}
+                  >
+                    <NumberInputField />
+                  </NumberInput>
+                )}
+              />
+
+              <Text color='red.500'>{errors.price?.message}</Text>
+            </FormControl>
+          </GridItem>
+
+          <GridItem colSpan={2}>
+            <FormControl
+              id='short_description'
+              isInvalid={errors.shortDescription}
+            >
+              <FormLabel>Short Description</FormLabel>
+              <Textarea {...register('short_description')} />
+              <Text color='red.500'>{errors.shortDescription?.message}</Text>
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl id='dimension' isInvalid={errors.dimension}>
+              <FormLabel>Dimension</FormLabel>
+              <Input {...register('dimension')} />
+              <Text color='red.500'>{errors.dimension?.message}</Text>
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl id='file'>
+              <FormLabel>Upload Image</FormLabel>
+              <InputGroup>
+                <InputLeftAddon>
+                  <AttachmentIcon />
+                </InputLeftAddon>
+                <Input
+                  type='file'
+                  accept='.png,.jpeg,.jpg'
+                  onChange={handleFileChange}
+                />
+              </InputGroup>
+            </FormControl>
+            <GridItem />
+          </GridItem>
+
+          <GridItem>
+            <Button mt={6} type='submit' colorScheme='blue'>
+              Submit
+            </Button>
+          </GridItem>
+          <GridItem>
+            {previewImage && (
+              <Box mt={4}>
+                <Image
+                  src={previewImage}
+                  alt='Preview'
+                  boxSize='200px'
+                  objectFit='cover'
+                  borderRadius='md'
+                  width='12%'
+                  height='auto'
+                />
+              </Box>
+            )}
+          </GridItem>
+        </Grid>
+      </Box>
+      {isMounted && <DevTool control={control} />}{' '}
+    </>
   );
 };
 

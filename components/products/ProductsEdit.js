@@ -148,9 +148,7 @@ function EditProductModal({ product, onClose, mutate }) {
       const uniqueFileName = `${product.category}_${product.name}_${
         product?.dimension
       }_${uuidv4()}.${fileExtension}`;
-      console.log(uniqueFileName);
       const filePath = `${uniqueFileName}`;
-      console.log(filePath);
       // Upload the image to Supabase storage
       const { error: uploadError } = await supabase.storage
         .from('rekawice')
@@ -162,7 +160,6 @@ function EditProductModal({ product, onClose, mutate }) {
         // Construct the public URL
         const projectUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}`;
         const publicURL = `${projectUrl}/storage/v1/object/public/rekawice/${filePath}`;
-        console.log(publicURL);
         setPublicUrlDataBase(publicURL);
         // Update the new image preview
         setNewImage(publicURL);

@@ -2,8 +2,6 @@ import { supabase } from '../../utils/supabaseClient.js';
 import Boots from '../../components/boots/Boots.js';
 
 const index = ({ sandals, halfBoots, fullBoots }) => {
-  console.log(sandals);
-  console.log(halfBoots);
   return (
     <Boots halfBoots={halfBoots} sandals={sandals} fullBoots={fullBoots} />
   );
